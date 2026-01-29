@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: orderprocessing-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${MSSQL_SA_PASSWORD}  # from .env file
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: orderprocessing-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}   # from .env file
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD} # from .env file
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  sqlserver_data:
